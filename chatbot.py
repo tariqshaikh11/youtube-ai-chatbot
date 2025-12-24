@@ -12,7 +12,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
 from urllib.parse import urlparse, parse_qs
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyBKmK_7FeUyTKvnCkHOEPSJj5BQ8PU-GOw"  
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 class YouTubeChatBot:
 
@@ -81,4 +81,5 @@ Question: {question}
             return "⚠ You must submit a video first."
     
         return self.main_chain.invoke(question)
+
 
