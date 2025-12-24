@@ -1,0 +1,10 @@
+streamlit
+pytubefix
+langchain
+langchain-community
+langchain-core
+langchain-text-splitters
+langchain-google-genai
+sentence-transformers
+faiss-cpu
+youtube-transcript-api
