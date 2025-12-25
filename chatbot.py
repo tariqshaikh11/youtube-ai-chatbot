@@ -13,7 +13,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from urllib.parse import urlparse, parse_qs
 
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyBeqUJ6tCk9C-kEe_u46z1swRbIMoszz3s"  
+  
 def get_video_id(url: str):
         url = url.strip()
         url = url.split("&")[0]
