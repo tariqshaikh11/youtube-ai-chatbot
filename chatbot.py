@@ -11,9 +11,38 @@ from langchain_core.runnables import RunnableParallel, RunnablePassthrough, Runn
 from langchain_core.output_parsers import StrOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
 from urllib.parse import urlparse, parse_qs
-import streamlit as st
-GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
+
+os.environ["GOOGLE_API_KEY"] = "AIzaSyBeqUJ6tCk9C-kEe_u46z1swRbIMoszz3s"  
+def get_video_id(url: str):
+        url = url.strip()
+        url = url.split("&")[0]
+
+        if not url.startswith("http"):
+            url = "https://" + url
+
+        parsed = urlparse(url)
+
+        host = parsed.hostname or ""
+        path = parsed.path
+
+        # watch url
+        if "youtube.com" in host and path == "/watch":
+            return parse_qs(parsed.query).get("v", [None])[0]
+
+        # shorts
+        if "youtube.com" in host and path.startswith("/shorts/"):
+            return path.split("/shorts/")[1]
+
+        # embed
+        if "youtube.com" in host and path.startswith("/embed/"):
+            return path.split("/embed/")[1]
+
+        # youtu.be short
+        if "youtu.be" in host:
+            return path.lstrip("/")
+
+        return None
 class YouTubeChatBot:
 
     def __init__(self):
@@ -23,12 +52,15 @@ class YouTubeChatBot:
         self.main_chain = None
         self.loaded = False
 
+    
+
+    
 
     def load_video(self, video_url):
 
         try:
-            yt = YouTube(video_url)
-            video_id =yt.video_id
+            
+            video_id = get_video_id(video_url)
             ytt_api = YouTubeTranscriptApi()
             transcript = ytt_api.fetch(video_id)
         except:
@@ -81,6 +113,4 @@ Question: {question}
             return "⚠ You must submit a video first."
     
         return self.main_chain.invoke(question)
-
-
 
